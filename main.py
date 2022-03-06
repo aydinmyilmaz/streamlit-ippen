@@ -9,7 +9,7 @@ import streamlit.components.v1 as components
 
 st.title('Analyse NER')
 
-path = "/Users/aydin/Documents/Ippen/projects/ner-prepro/code/raw_data/kg_ner_data-10_000.json"
+path = "data_5000.json"
 
 with open(path, 'r') as json_file:
     data = json.load(json_file)
