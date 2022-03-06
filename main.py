@@ -6,7 +6,7 @@ import streamlit.components.v1 as components
 
 st.title('Analyse NER')
 
-path = "data_5000.json"
+path = "data_1000.json"
 
 with open(path, 'r') as json_file:
     data = json.load(json_file)
