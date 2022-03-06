@@ -1,5 +1,4 @@
 streamlit
-random
 os
 pandas
 numpy
