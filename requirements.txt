@@ -3,3 +3,4 @@ pandas
 numpy
 IPython
 pytrends==4.8.0
+matplotlib
