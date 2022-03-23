@@ -3,6 +3,9 @@ import json
 from IPython.display import display, HTML
 import style_utils as style_config
 import streamlit.components.v1 as components
+from pytrends.request import TrendReq
+import matplotlib.pyplot as plt
+from pandas.plotting import register_matplotlib_converters
 
 st.title('Analyse NER')
 
@@ -11,13 +14,14 @@ path = "data_1000.json"
 with open(path, 'r') as json_file:
     data = json.load(json_file)
 
-idx = str(st.sidebar.number_input('Insert an index number', min_value=0, max_value=10000, value=0))
+idx = str(st.sidebar.number_input('Insert an index number between 0-1000 to select a random Story', min_value=0, max_value=10000, value=0))
 st.write('Given index number : ', idx)
+st.write('Online Id:', data[idx]['meta']['online_id'])
+topx = st.sidebar.number_input('Insert most important x entity number to visualize', min_value=0, max_value=100, value=10)
+st.write('Given top x entity index number : ', topx)
 
-topx = st.sidebar.number_input('Insert most important x entity number', min_value=0, max_value=100, value=10)
-st.write('Given top x number : ', topx)
-
-if st.button('Show raw results'):
+if st.sidebar.button('Show raw ner results dict'):
+    st.write('Raw results')
     st.write(data[idx])
 
 def highlight_text(idx, topx):
@@ -65,9 +69,46 @@ def highlight_text(idx, topx):
     html_content_save = style_config.STYLE_CONFIG_ENTITIES+ " "+html_output
 
     #st.markdown(display(HTML(html_content_save)))  
-    components.html(html_content_save, width=800, height=3000)
+    components.html(html_content_save, width=800, height=1000)
 
+def show_google_trends(token):
 
-if st.button('Show highlighted text'):
+    pytrends = TrendReq(hl='de-GER', tz=360)
+
+    pytrends.build_payload(kw_list=[token])
+
+    time_df = pytrends.interest_over_time()
+
+    # creating graph
+    plt.style.use('bmh')
+    register_matplotlib_converters()
+    fig,ax = plt.subplots(figsize=(12, 6))
+    time_df[token].plot(color='purple')
+    # adding title and labels
+    plt.title(f'Total Google Searches for {token}', fontweight='bold')
+    plt.xlabel('Year')
+    plt.ylabel('Total Count')
+
+    return st.pyplot(fig)
+
+def google_trending_searches():
+    pytrends = TrendReq(hl='de-GER', tz=360)
+    return pytrends.trending_searches(pn='germany')
+
+if st.sidebar.button('Show highlighted text'):
     st.write('Online Id:', data[idx]['meta']['online_id'])
-    highlight_text(idx, topx)   
+    st.write('Highlighted text')
+    highlight_text(idx, topx) 
+
+entity_idx = st.sidebar.number_input('Insert entity index number for Google Trends', min_value=0, max_value=20, value=0)
+token = data[idx]['ner_results'][entity_idx]['token']
+st.sidebar.write(f'token for entity index  "{entity_idx}" :', token )
+
+if st.sidebar.button(f'Show Google Trends Graph for "{token}" ') and -1 < entity_idx < 20:
+    try:
+        show_google_trends(token)[0]
+    except:
+        st.write(f"No data available in Google Trends for the token {token}")
+
+if st.sidebar.button(f'Show Google Trending Searches in Germany'):
+    st.write(google_trending_searches())
