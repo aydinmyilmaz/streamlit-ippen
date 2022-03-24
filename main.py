@@ -104,11 +104,9 @@ entity_idx = st.sidebar.number_input('Insert entity index number for Google Tren
 token = data[idx]['ner_results'][entity_idx]['token']
 st.sidebar.write(f'token for entity index  "{entity_idx}" :', token )
 
-if st.sidebar.button(f'Show Google Trends Graph for "{token}" ') and -1 < entity_idx < 20:
-    try:
-        show_google_trends(token)[0]
-    except:
-        st.write(f"No data available in Google Trends for the token {token}")
+if st.sidebar.button(f'Show Google Trends Graph for "{token}" '):
+    show_google_trends(token)
+
 
 if st.sidebar.button(f'Show Google Trending Searches in Germany'):
     st.write(google_trending_searches())
