@@ -1,6 +1,7 @@
 import streamlit as st
 import json 
-from IPython.display import display, HTML
+from IPython.display import display, HTML, Audio
+from gtts import gTTS
 import style_utils as style_config
 import streamlit.components.v1 as components
 from pytrends.request import TrendReq
@@ -95,6 +96,14 @@ def google_trending_searches():
     pytrends = TrendReq(hl='de-GER', tz=360)
     return pytrends.trending_searches(pn='germany')
 
+
+def text_2_speech(text):
+    tts = gTTS(text, lang="de", slow=False)
+    tts.save("1.wav")
+    sound_file = open('1.wav','rb')
+    audio_bytes = sound_file.read()
+    return st.audio(audio_bytes, format='audio/ogg')
+
 if st.sidebar.button('Show highlighted text'):
     st.write('Online Id:', data[idx]['meta']['online_id'])
     st.write('Highlighted text')
@@ -110,3 +119,7 @@ if st.sidebar.button(f'Show Google Trends Graph for "{token}" '):
 
 if st.sidebar.button(f'Show Google Trending Searches in Germany'):
     st.write(google_trending_searches())
+
+if st.sidebar.button(f'Read Text-2-Speech'):
+    text = data[idx]['meta']['text']
+    text_2_speech(text)
