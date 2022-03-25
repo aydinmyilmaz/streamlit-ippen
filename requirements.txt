@@ -5,3 +5,4 @@ IPython
 pytrends==4.8.0
 matplotlib
 gTTS==2.2.4
+boto3
