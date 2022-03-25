@@ -7,6 +7,8 @@ import streamlit.components.v1 as components
 from pytrends.request import TrendReq
 import matplotlib.pyplot as plt
 from pandas.plotting import register_matplotlib_converters
+from boto3 import client
+st.set_page_config(layout="wide")
 
 st.title('Analyse NER')
 
@@ -15,13 +17,17 @@ path = "data_1000.json"
 with open(path, 'r') as json_file:
     data = json.load(json_file)
 
+st.sidebar.title('Selection Menu')
+st.sidebar.header('Select Parameters')
+
 idx = str(st.sidebar.number_input('Insert an index number between 0-1000 to select a random Story', min_value=0, max_value=10000, value=0))
 st.write('Given index number : ', idx)
 st.write('Online Id:', data[idx]['meta']['online_id'])
 topx = st.sidebar.number_input('Insert most important x entity number to visualize', min_value=0, max_value=100, value=10)
 st.write('Given top x entity index number : ', topx)
 
-if st.sidebar.button('Show raw ner results dict'):
+st.sidebar.header('Select Function for NER')
+if st.sidebar.button('Show raw ner results dict   '):
     st.write('Raw results')
     st.write(data[idx])
 
@@ -104,22 +110,47 @@ def text_2_speech(text):
     audio_bytes = sound_file.read()
     return st.audio(audio_bytes, format='audio/ogg')
 
-if st.sidebar.button('Show highlighted text'):
+def googlepolly_tts(text, voice):
+    polly = client('polly', region_name='us-west-2')
+    response = polly.synthesize_speech(
+            Text=text,
+            OutputFormat='mp3',
+            VoiceId=voice)
+    stream = response.get('AudioStream')
+    with open('output_aws_polly.mp3', 'wb') as f:
+        data = stream.read()
+        f.write(data)
+
+    sound_file = open('output_aws_polly.mp3','rb')
+    audio_bytes = sound_file.read()
+    return st.audio(audio_bytes, format='audio/ogg')
+
+if st.sidebar.button('Show highlighted text     '):
     st.write('Online Id:', data[idx]['meta']['online_id'])
     st.write('Highlighted text')
     highlight_text(idx, topx) 
 
-entity_idx = st.sidebar.number_input('Insert entity index number for Google Trends', min_value=0, max_value=20, value=0)
+st.sidebar.header('Select Parameter and Function for G-Trends')
+
+entity_idx = st.sidebar.number_input('Select entity index number for Google Trends', min_value=0, max_value=20, value=0)
 token = data[idx]['ner_results'][entity_idx]['token']
-st.sidebar.write(f'token for entity index  "{entity_idx}" :', token )
+st.sidebar.write(f'You have selected entity index  "{entity_idx}" token : {token}')
 
 if st.sidebar.button(f'Show Google Trends Graph for "{token}" '):
     show_google_trends(token)
 
-
 if st.sidebar.button(f'Show Google Trending Searches in Germany'):
     st.write(google_trending_searches())
 
-if st.sidebar.button(f'Read Text-2-Speech'):
+st.sidebar.header('Select Parameter and Function for Voice')
+
+voice = st.sidebar.selectbox('Select voice', ['Amelie'])
+if st.sidebar.button(f'Run open source Text-2-Speech'):
     text = data[idx]['meta']['text']
     text_2_speech(text)
+
+voice = st.sidebar.selectbox('Select voice', ['Vicki', 'Marlene','Hans'])
+
+if st.sidebar.button(f'Run AWS Polly Text-2-Speech'): 
+    text = data[idx]['meta']['text']
+    googlepolly_tts(text, voice)
