@@ -154,3 +154,4 @@ voice = st.sidebar.selectbox('Select voice', ['Vicki', 'Marlene','Hans'])
 if st.sidebar.button(f'Run AWS Polly Text-2-Speech'): 
     text = data[idx]['meta']['text']
     googlepolly_tts(text, voice)
+
