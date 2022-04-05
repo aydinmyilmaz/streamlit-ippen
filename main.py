@@ -1,5 +1,6 @@
 import streamlit as st
 import json 
+import logging
 from IPython.display import display, HTML, Audio
 from gtts import gTTS
 import style_utils as style_config
@@ -8,6 +9,11 @@ from pytrends.request import TrendReq
 import matplotlib.pyplot as plt
 from pandas.plotting import register_matplotlib_converters
 from boto3 import client
+
+logger = logging.getLogger("streamlit-ner-app")
+logger.setLevel(logging.INFO)
+
+
 st.set_page_config(layout="wide")
 
 st.title('Analyse NER')
@@ -48,7 +54,11 @@ def highlight_text(idx, topx):
                 white_end = 0
             white_text = text[white_begin:white_end]
             html_output = '<span class="nlp-display-others" style="background-color: white">{}</span>'.format(white_text)
-            lab = item['entity'] + " - score " + str(round(item['salience']*100)) + " - idx " + item['entity_count']
+            try:
+                lab = item['entity'] + " - score " + str(round(item['salience']*100)) + " - idx " + item['entity_count']
+            except Exception as e:
+                logger.error("highlight text error: %s", e)
+                print(e)
             html_output += '<span class="nlp-display-entity-wrapper" style="background-color: {}"><span class="nlp-display-entity-name">{} </span><span class="nlp-display-entity-type">{}</span></span>'.format(
                         color_dict[item['entity']],
                         item['token'],
@@ -59,7 +69,11 @@ def highlight_text(idx, topx):
             white_end = item["begin_end_offset"][0]-1
             white_text = text[white_begin:white_end]
             html_output += '<span class="nlp-display-others" style="background-color: white">{}</span>'.format(white_text)
-            lab = item['entity'] + " - score " + str(round(item['salience']*100)) + " - idx " + item['entity_count']
+            try:
+                lab = item['entity'] + " - score " + str(round(item['salience']*100)) + " - idx " + item['entity_count']
+            except Exception as e:
+                logger.error("highlight text error: %s", e)
+                print(e)
             html_output += '<span class="nlp-display-entity-wrapper" style="background-color: {}"><span class="nlp-display-entity-name">{} </span><span class="nlp-display-entity-type">{}</span></span>'.format(
                         color_dict[item['entity']],
                         item['token'],
