@@ -56,35 +56,27 @@ def highlight_text(idx, topx):
             html_output = '<span class="nlp-display-others" style="background-color: white">{}</span>'.format(white_text)
             try:
                 lab = item['entity'] + " - score " + str(round(item['salience']*100)) + " - idx " + item['entity_count']
-                html_output += '<span class="nlp-display-entity-wrapper" style="background-color: {}"><span class="nlp-display-entity-name">{} </span><span class="nlp-display-entity-type">{}</span></span>'.format(
-                        color_dict[item['entity']],
-                        item['token'],
-                        lab)
-                white_begin = item["begin_end_offset"][1]
-                i +=1
-            except Exception as e:
-                logger.error("highlight text error: %s", e)
-                print(e)
-        else:
-            white_end = item["begin_end_offset"][0]-1
-            white_text = text[white_begin:white_end]
-            html_output += '<span class="nlp-display-others" style="background-color: white">{}</span>'.format(white_text)
+            except:
+                lab = item['entity'] + " - score " + str(round(item['salience']*100)) + " - idx " + item['entity_index']
             html_output += '<span class="nlp-display-entity-wrapper" style="background-color: {}"><span class="nlp-display-entity-name">{} </span><span class="nlp-display-entity-type">{}</span></span>'.format(
                         color_dict[item['entity']],
                         item['token'],
                         lab)
             white_begin = item["begin_end_offset"][1]
+            i +=1
+        else:
+            white_end = item["begin_end_offset"][0]-1
+            white_text = text[white_begin:white_end]
+            html_output += '<span class="nlp-display-others" style="background-color: white">{}</span>'.format(white_text)
             try:
                 lab = item['entity'] + " - score " + str(round(item['salience']*100)) + " - idx " + item['entity_count']
-                html_output += '<span class="nlp-display-entity-wrapper" style="background-color: {}"><span class="nlp-display-entity-name">{} </span><span class="nlp-display-entity-type">{}</span></span>'.format(
+            except:
+                lab = item['entity'] + " - score " + str(round(item['salience']*100)) + " - idx " + item['entity_index']
+            html_output += '<span class="nlp-display-entity-wrapper" style="background-color: {}"><span class="nlp-display-entity-name">{} </span><span class="nlp-display-entity-type">{}</span></span>'.format(
                         color_dict[item['entity']],
                         item['token'],
                         lab)
-                white_begin = item["begin_end_offset"][1]
-                i +=1
-            except Exception as e:
-                logger.error("highlight text error: %s", e)
-                print(e)
+            white_begin = item["begin_end_offset"][1]
 
     white_text = text[white_begin:len(text)]
     html_output += '<span class="nlp-display-others" style="background-color: white">{}</span>'.format(white_text)
