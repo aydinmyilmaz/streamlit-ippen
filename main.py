@@ -104,9 +104,9 @@ def show_google_trends(token):
     fig,ax = plt.subplots(figsize=(12, 6))
     time_df[token].plot(color='purple')
     # adding title and labels
-    plt.title(f'Total Google Searches for {token}', fontweight='bold')
+    plt.title(f'Overall Google Search Trend for {token}', fontweight='bold')
     plt.xlabel('Year')
-    plt.ylabel('Total Count - Normalized 0-100')
+    plt.ylabel('Total Count (Normalized between 0-100)')
 
     return st.pyplot(fig)
 
