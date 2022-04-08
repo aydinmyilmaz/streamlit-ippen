@@ -106,7 +106,7 @@ def show_google_trends(token):
     # adding title and labels
     plt.title(f'Total Google Searches for {token}', fontweight='bold')
     plt.xlabel('Year')
-    plt.ylabel('Total Count')
+    plt.ylabel('Total Count - Normalized 0-100')
 
     return st.pyplot(fig)
 
