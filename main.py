@@ -9,6 +9,7 @@ from pytrends.request import TrendReq
 import matplotlib.pyplot as plt
 from pandas.plotting import register_matplotlib_converters
 from boto3 import client
+from PIL import Image
 
 logger = logging.getLogger("streamlit-ner-app")
 logger.setLevel(logging.INFO)
