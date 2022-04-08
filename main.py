@@ -18,6 +18,9 @@ st.set_page_config(layout="wide")
 
 st.title('Analyse NER')
 
+image = Image.open('Ippenlogo.png')
+st.sidebar.image(image)
+
 path = "data_1000.json"
 
 with open(path, 'r') as json_file:
