@@ -120,7 +120,7 @@ def google_trending_searches():
 
 
 def text_2_speech(text):
-    tts = gTTS(text, lang="de", slow=False)
+    tts = gTTS(text[0:800], lang="de", slow=False)
     tts.save("1.wav")
     sound_file = open('1.wav','rb')
     audio_bytes = sound_file.read()
@@ -129,7 +129,7 @@ def text_2_speech(text):
 def googlepolly_tts(text, voice):
     polly = client('polly', region_name='us-west-2')
     response = polly.synthesize_speech(
-            Text=text,
+            Text=text[0:800],
             OutputFormat='mp3',
             VoiceId=voice)
     stream = response.get('AudioStream')
