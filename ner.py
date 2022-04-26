@@ -1,165 +1,135 @@
-import random
+import streamlit as st
+import json 
+from IPython.display import display, HTML, Audio
+from gtts import gTTS
+import style_utils as style_config
+import streamlit.components.v1 as components
+from pytrends.request import TrendReq
+import matplotlib.pyplot as plt
+from pandas.plotting import register_matplotlib_converters
+from boto3 import client
+from PIL import Image
+import openai
 import os
-import json
-from . import style_utils as style_config
-from IPython.display import display, HTML
 
-here = os.path.abspath(os.path.dirname(__file__))
+def app():
 
-class NerVisualizer:
-    def __init__(self):
-        with open(os.path.join(here, 'label_colors/ner.json'), 'r', encoding='utf-8') as f_:
-            self.label_colors = json.load(f_)
+    st.title('Analyse NER')
 
-    #public function to get color for a label
-    def get_label_color(self, label):
-        """Returns color of a particular label
-        
-        Input: entity label <string>
-        Output: Color <string> or <None> if not found
-        """
+    path = "data_1000.json"
 
-        if str(label).lower() in self.label_colors:
-            return self.label_colors[label.lower()]
-        else:
-            return None
+    with open(path, 'r') as json_file:
+        data = json.load(json_file)
 
-    # private function for colors for display
-    def __get_label(self, label):
-        """Internal function to generate random color codes for missing colors
-        
-        Input: dictionary of entity labels and corresponding colors
-        Output: color code (Hex)
-        """
-        if str(label).lower() in self.label_colors:
-            return self.label_colors[label.lower()]
-        else:
-            #update it to fetch from git new labels 
-            r = lambda: random.randint(0,200)
-            return '#%02X%02X%02X' % (r(), r(), r())
+    st.sidebar.title('Selection Menu')
+    st.sidebar.header('Select Parameters')
 
-    def set_label_colors(self, color_dict):
-        """Sets label colors.
-        input: dictionary of entity labels and corresponding colors
-        output: self object - to allow chaining
-        note: Previous values of colors will be overwritten
-        """
-        
-        for key, value in color_dict.items():
-            self.label_colors[key.lower()] = value
-        return self      
+    idx = str(st.sidebar.number_input('Insert an index number between 0-1000 to select a random Story', min_value=0, max_value=10000, value=0))
+    st.write('Given index number : ', idx)
+    st.write('Online Id:', data[idx]['meta']['online_id'])
+    topx = st.sidebar.number_input('Insert most important x entity number to visualize', min_value=0, max_value=100, value=10)
+    st.write('Given top x entity index number : ', topx)
 
-    def __verify_structure(self, result, label_col, document_col, original_text):
 
-        if original_text is None:
-            basic_msg_1 = """Incorrect annotation structure of '{}'.""".format(document_col)
-            if not hasattr(result[document_col][0], 'result'):
-                raise AttributeError(basic_msg_1+""" 'result' attribute not found in the annotation. 
-                Make sure '"""+document_col+"""' is a list of objects having the following structure: 
-                    Annotation(type='annotation', begin=0, end=10, result='This is a text')
-                Or You can pass the text manually using 'raw_text' argument.""")
 
-        basic_msg_1 = """Incorrect annotation structure of '{}'.""".format(label_col)
-        basic_msg = """
-        In sparknlp please use 'LightPipeline.fullAnnotate' for LightPipeline or 'Pipeline.transform' for PipelineModel.
-        Or 
-        Make sure '"""+label_col+"""' is a list of objects having the following structure: 
-            Annotation(type='annotation', begin=0, end=0, result='Adam', metadata={'entity': 'PERSON'})"""
+    if st.sidebar.button('Show raw ner results dict   '):
+        st.write('Raw results')
+        st.write(data[idx])
 
-        for entity in result[label_col]:
-            if not hasattr(entity, 'begin'):
-                raise AttributeError( basic_msg_1 + """ 'begin' attribute not found in the annotation."""+basic_msg)
-            if not hasattr(entity, 'end'):
-                raise AttributeError(basic_msg_1 + """ 'end' attribute not found in the annotation."""+basic_msg)
-            if not hasattr(entity, 'result'):
-                raise AttributeError(basic_msg_1 + """ 'result' attribute not found in the annotation."""+basic_msg)
-            if not hasattr(entity, 'metadata'):
-                raise AttributeError(basic_msg_1 + """ 'metadata' attribute not found in the annotation."""+basic_msg)
-            if 'entity' not in entity.metadata:
-                raise AttributeError(basic_msg_1+""" KeyError: 'entity' not found in metadata."""+basic_msg)
 
-    def __verify_input(self, result, label_col, document_col, original_text):
-        # check if label colum in result
-        if label_col not in result:
-            raise AttributeError("""column/key '{}' not found in the provided dataframe/dictionary.
-            Please specify the correct key/column using 'label_col' argument.""".format(label_col))
-        
-        if original_text is not None:
-            # check if provided text is correct data type
-            if not isinstance(original_text, str):
-                raise ValueError("Invalid value for argument 'raw_text' input. Text should be of type 'str'.")
-        
-        else:
-            # check if document column in result
-            if document_col not in result:
-                raise AttributeError("""column/key '{}' not found in the provided dataframe/dictionary.
-                Please specify the correct key/column using 'document_col' argument.
-                Or You can pass the text manually using 'raw_text' argument""".format(document_col))
-
-        self.__verify_structure( result, label_col, document_col, original_text)
-
-    # main display function
-    def __display_ner(self, result, label_col, document_col, original_text, labels_list = None):
-
-        if original_text is None:
-            original_text = result[document_col][0].result
-
-        if labels_list is not None:
-            labels_list = [v.lower() for v in labels_list]
-        label_color = {}
-        html_output = ""
-        pos = 0
-        for entity in result[label_col]:
-            entity_type = entity.metadata['entity'].lower()
-            if (entity_type not in label_color) and ((labels_list is None) or (entity_type in labels_list)) :
-                label_color[entity_type] = self.__get_label(entity_type)
-
-            begin = int(entity.begin)
-            end = int(entity.end)
-            if pos < begin and pos < len(original_text):
-                white_text = original_text[pos:begin]
-                html_output += '<span class="spark-nlp-display-others" style="background-color: white">{}</span>'.format(white_text)
-            pos = end+1
-
-            if entity_type in label_color:
-                html_output += '<span class="spark-nlp-display-entity-wrapper" style="background-color: {}"><span class="spark-nlp-display-entity-name">{} </span><span class="spark-nlp-display-entity-type">{}</span></span>'.format(
-                    label_color[entity_type],
-                    entity.result,
-                    entity.metadata['entity'])
+    def highlight_text(idx, topx):
+        color_dict = {"CONSUMER_GOOD":"#800000",
+        "OTHER":"#800080", "LOCATION":"#000080",'PERSON':"#808000",
+        'WORK_OF_ART':"#808080",'ORGANIZATION':"#0000FF",'DATE': "#808080",
+        'EVENT':"#808000",'PHONE_NUMBER':"#808080"}
+        entity_list = data[idx]['ner_results']
+        text = data[idx]['meta']['text']
+        i=0
+        for item in sorted(entity_list[0:topx], key=lambda x:x["begin_end_offset"][0]):
+            if i == 0:
+                white_begin = 0
+                if item["begin_end_offset"][0] > 0:
+                    white_end = item["begin_end_offset"][0]-1
+                else:
+                    white_end = 0
+                white_text = text[white_begin:white_end]
+                html_output = '<span class="nlp-display-others" style="background-color: white">{}</span>'.format(white_text)
+                try:
+                    lab = item['entity'] + " - score " + str(round(item['salience']*100)) + " - idx " + item['entity_count']
+                except:
+                    lab = item['entity'] + " - score " + str(round(item['salience']*100)) + " - idx " + item['entity_index']
+                html_output += '<span class="nlp-display-entity-wrapper" style="background-color: {}"><span class="nlp-display-entity-name">{} </span><span class="nlp-display-entity-type">{}</span></span>'.format(
+                            color_dict[item['entity']],
+                            item['token'],
+                            lab)
+                white_begin = item["begin_end_offset"][1]
+                i +=1
             else:
-                html_output += '<span class="spark-nlp-display-others" style="background-color: white">{}</span>'.format(entity.result)
+                white_end = item["begin_end_offset"][0]-1
+                white_text = text[white_begin:white_end]
+                html_output += '<span class="nlp-display-others" style="background-color: white">{}</span>'.format(white_text)
+                try:
+                    lab = item['entity'] + " - score " + str(round(item['salience']*100)) + " - idx " + item['entity_count']
+                except:
+                    lab = item['entity'] + " - score " + str(round(item['salience']*100)) + " - idx " + item['entity_index']
+                html_output += '<span class="nlp-display-entity-wrapper" style="background-color: {}"><span class="nlp-display-entity-name">{} </span><span class="nlp-display-entity-type">{}</span></span>'.format(
+                            color_dict[item['entity']],
+                            item['token'],
+                            lab)
+                white_begin = item["begin_end_offset"][1]
 
-        if pos < len(original_text):
-            html_output += '<span class="spark-nlp-display-others" style="background-color: white">{}</span>'.format(original_text[pos:])
+        white_text = text[white_begin:len(text)]
+        html_output += '<span class="nlp-display-others" style="background-color: white">{}</span>'.format(white_text)
 
         html_output += """</div>"""
 
         html_output = html_output.replace("\n", "<br>")
 
-        return html_output
+        html_content_save = style_config.STYLE_CONFIG_ENTITIES+ " "+html_output
 
-    def display(self, result, label_col, document_col='document', raw_text=None, labels=None, return_html=False, save_path=None):
-        """Displays NER visualization. 
-        Inputs:
-        result -- A Dataframe or dictionary.
-        label_col -- Name of the column/key containing NER annotations.
-        document_col -- Name of the column/key containing text document.
-        original_text -- Original text of type 'str'. If specified, it will take precedence over 'document_col' and will be used as the reference text for display.
-        labels_list -- A list of labels that should be highlighted in the output. Default: Display all labels.
-        Output: Visualization
-        """
-        
-        self.__verify_input(result, label_col, document_col, raw_text)
-        
-        html_content = self.__display_ner(result, label_col, document_col, raw_text, labels)
-        
-        html_content_save = style_config.STYLE_CONFIG_ENTITIES+ " "+html_content
-        
-        if save_path != None:
-            with open(save_path, 'w') as f_:
-                f_.write(html_content_save)
-        
-        if return_html:
-            return html_content_save
-        else:
-            return display(HTML(html_content_save))
+        #st.markdown(display(HTML(html_content_save)))  
+        components.html(html_content_save, width=800, height=1000)
+
+    def show_google_trends(token):
+
+        pytrends = TrendReq(hl='de-GER', tz=360)
+
+        pytrends.build_payload(kw_list=[token])
+
+        time_df = pytrends.interest_over_time()
+
+        # creating graph
+        plt.style.use('bmh')
+        register_matplotlib_converters()
+        fig,ax = plt.subplots(figsize=(12, 6))
+        time_df[token].plot(color='purple')
+        # adding title and labels
+        plt.title(f'Total Google Searches for {token}', fontweight='bold')
+        plt.xlabel('Year')
+        plt.ylabel('Total Count')
+
+        return st.pyplot(fig)
+
+    def google_trending_searches():
+        pytrends = TrendReq(hl='de-GER', tz=360)
+        return pytrends.trending_searches(pn='germany')
+
+
+    if st.sidebar.button('Show highlighted text     '):
+        st.write('Online Id:', data[idx]['meta']['online_id'])
+        st.write('Highlighted text')
+        highlight_text(idx, topx) 
+
+    st.sidebar.header('Select Parameter and Function for G-Trends')
+
+    entity_idx = st.sidebar.number_input('Select entity index number for Google Trends', min_value=0, max_value=20, value=0)
+    token = data[idx]['ner_results'][entity_idx]['token']
+    st.sidebar.write(f'You have selected entity index  "{entity_idx}" token : {token}')
+
+    if st.sidebar.button(f'Show Google Trends Graph for "{token}" '):
+        show_google_trends(token)
+
+    if st.sidebar.button(f'Show Google Trending Searches in Germany'):
+        st.write(google_trending_searches())
+
+
