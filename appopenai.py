@@ -4,14 +4,14 @@ Todo list app
 
 import streamlit as st
 import openai
+import os
 
 def app():
 
     def recipeGenerator(name_of_dish, ingredients):
         openai.organization = 'ippen'
-        openai.api_key = "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"
-        # openai_api_key = os.environ['OPENAI_API_KEY']
-        # openai.api_key = openai_api_key
+        openai_api_key = os.environ['OPENAI_API_KEY']
+        openai.api_key = openai_api_key
         headline = "Schreiben Sie ein Rezept basierend auf diesen Zutaten und Anweisungen:\n\n"
         name_of_dish = name_of_dish 
         ingredients = ingredients + "\Anweisungen:\n"
