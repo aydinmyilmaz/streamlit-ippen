@@ -10,7 +10,7 @@ def app():
 
     def recipeGenerator(name_of_dish, ingredients):
         openai.organization = 'ippen'
-        openai_api_key = os.environ['OPENAI_API_KEY']
+        openai_api_key = os.environ.get('OPENAI_API_KEY')
         openai.api_key = openai_api_key
         headline = "Schreiben Sie ein Rezept basierend auf diesen Zutaten und Anweisungen:\n\n"
         name_of_dish = name_of_dish 
