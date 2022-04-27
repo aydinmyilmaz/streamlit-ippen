@@ -9,10 +9,9 @@ def app():
 
     add_selectbox = st.sidebar.selectbox(
     "Select NLP Function?",
-    ("Summarization", "QA")
-)
-    if add_selectbox == "QA":
+    ("Summarization", "QA") )
 
+    def qa():
         option = st.selectbox(
                     'Select an option',
                     ('', 'Use Uploaded Text', 'Insert Own Text'))
@@ -44,6 +43,9 @@ def app():
                 'question': question
             })
             st.write('Answer\n\n', response['answer'])
+
+    if add_selectbox == "QA":
+        qa()
 
     else:
         st.write("coming soon...")

@@ -50,13 +50,13 @@ def app():
 )
     if add_selectbox == "Recipe Generator":
         st.title("OpenAI Recipe Generator")
-        name_of_dish = st.text_input("enter name of the dish", "", key="1")
+        name_of_dish = st.text_input("Enter name of the dish", "", key="1")
         st.write('Name of the dish is', name_of_dish)
-        ingredients = st.text_area("enter ingredients","", key="2")
-        st.write('ingredients\n\n', ingredients)
+        ingredients = st.text_area("Enter ingredients","", key="2")
+        st.markdown('**ingredients**\n\n', ingredients)
         if st.button('Show Recipe'):
             recipe = recipeGenerator(name_of_dish, ingredients)
-            st.write('eat at your own risk\n\n', recipe['choices'][0]['text'])
+            st.markdown('**eat at your own risk!!!**\n\n', recipe['choices'][0]['text'])
     
     elif add_selectbox == "Summarization":
         st.title("OpenAI Summarization")
@@ -73,7 +73,7 @@ def app():
         text = st.text_area("enter a text in german","", key="1")
         st.write('**Text:**', text[0:500])
         summary = summary(text[0:500])
-        st.write('**Summary:**', summary['choices'][0]['text'])
+        st.write('**Summary:**', summary)
 
     else:
         st.write('coming soon...')
