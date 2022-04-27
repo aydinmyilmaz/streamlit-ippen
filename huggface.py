@@ -27,14 +27,14 @@ def app():
                 Löcher mit Millionen von Sonnenmassen (M☉) bilden.  Es besteht 
                 Konsens darüber, dass in den Zentren der meisten Galaxien
                 supermassereiche Schwarze Löcher existieren."""
-            st.write('Context\n\n', context)
+            st.write('Text\n\n', context)
             question = "Wie Sonnenmassen entstehen?"
             st.write('Question\n\n', question)
 
         if option == 'Insert Own Text':
-        
-            context = st.text_area("Enter context", "", key="1")
-            st.write('Context\n\n', context)
+
+            context = st.text_area("Enter text", "", key="1")
+            st.write('Text\n\n', context)
             question = st.text_area("Enter question", "", key="2")
             st.write('Question\n\n', question)
         
