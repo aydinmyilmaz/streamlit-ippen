@@ -31,9 +31,9 @@ def app():
                 Löcher mit Millionen von Sonnenmassen (M☉) bilden.  Es besteht 
                 Konsens darüber, dass in den Zentren der meisten Galaxien
                 supermassereiche Schwarze Löcher existieren."""
-            st.write('Text\n\n', context)
+            st.write('**Text:**\n\n', context)
             question = "Wie Sonnenmassen entstehen?"
-            st.write('Question\n\n', question)
+            st.write('**Question:**\n\n', question)
 
         if option == 'Insert Own Text':
 
@@ -47,7 +47,7 @@ def app():
                 "context": context,
                 'question': question
             })
-            st.write('Answer\n\n', response['answer'])
+            st.write('**Answer**\n\n', response['answer'])
 
     def summarization():
         option = st.selectbox(
@@ -65,7 +65,7 @@ def app():
         
         if st.button('Show Summary'):
             #response = sum_pipeline
-            st.write('Answer\n\n', response['answer'])
+            st.write('**Answer**\n\n', response['answer'])
 
 
     if add_selectbox == "QA":
