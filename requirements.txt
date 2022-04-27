@@ -8,3 +8,4 @@ gTTS==2.2.4
 boto3
 openai
 transformers
+tensorflow==2.7.0
