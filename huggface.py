@@ -38,9 +38,9 @@ def app():
         if option == 'Insert Own Text':
 
             context = st.text_area("Enter text", "", key="1")
-            st.write('Text\n\n', context)
+            st.write('**Text:**\n\n', context)
             question = st.text_area("Enter question", "", key="2")
-            st.write('Question\n\n', question)
+            st.write('**Question:**\n\n', question)
         
         if st.button('Show Answer'):
             response = qa_pipeline({
