@@ -70,10 +70,11 @@ def app():
         # st.write('**Online Id:**', data[idx]['meta']['online_id'])
         # text = data[idx]['meta']['text'][0:500]
         
-        text = st.text_area("enter a text in german","", key="1")
+        text = st.text_area("Enter a text in german to summarize","", key="1")
         st.write('**Text:**', text[0:500])
-        summary = summary(text[0:500])
-        st.write('**Summary:**', summary)
+        res_summary = summary(text[0:500])
+        if st.button('Show Summary'):
+            st.write('**Summary:**', res_summary)
 
     else:
         st.write('coming soon...')
