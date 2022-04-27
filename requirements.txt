@@ -7,3 +7,4 @@ matplotlib
 gTTS==2.2.4
 boto3
 openai
+transformers
