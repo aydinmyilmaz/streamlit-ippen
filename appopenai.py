@@ -72,8 +72,9 @@ def app():
         
         text = st.text_area("Enter a text in german to summarize","", key="1")
         st.write('**Text:**', text[0:500])
-        res_summary = summary(text[0:500])
+        
         if st.button('Show Summary'):
+            res_summary = summary(text[0:500])
             st.write('**Summary:**', res_summary)
 
     else:
