@@ -1,20 +1,25 @@
 from transformers import pipeline
 import streamlit as st
+import torch
+from transformers import BertTokenizerFast, EncoderDecoderModel
+
 
 def app():
     qa_pipeline = pipeline(
                 "question-answering",
                 model="deepset/gelectra-base-germanquad"
-    )
+            ) 
 
     add_selectbox = st.sidebar.selectbox(
-    "Select NLP Function?",
-    ("Summarization", "QA") )
+    "Select NLP Function",
+    ("QA","Summarization"))
 
     def qa():
         option = st.selectbox(
                     'Select an option',
-                    ('', 'Use Uploaded Text', 'Insert Own Text'))
+                    ( '', 
+                     'Use Uploaded Text', 
+                     'Insert Own Text'))
 
         if option == 'Use Uploaded Text':
             context = """ Es wird erwartet, dass sich schwarze Löcher mit Sternmasse bilden,
@@ -43,6 +48,25 @@ def app():
                 'question': question
             })
             st.write('Answer\n\n', response['answer'])
+
+    def summarization():
+        option = st.selectbox(
+                    'Select an option',
+                    ('', 'Use Uploaded Text', 'Insert Own Text'))
+
+        if option == 'Use Uploaded Text':
+            context = """ Johannes Calvin (* 10. Juli 1509 in Noyon, Picardie; † 27. Mai 1564 in Genf) war unter den Reformatoren des 16. Jahrhunderts der bedeutendste systematische Theologe. Sein Hauptwerk, die Institutio Christianae Religionis, wird als eine „protestantische Summa“ bezeichnet. Die Verfolgung der französischen Protestanten unter König Franz I. zwang den Juristen, Humanisten und theologischen Autodidakten Calvin wie viele Gleichgesinnte zu einem Leben im Untergrund, schließlich zur Flucht aus Frankreich. Die Stadtrepublik Genf hatte bei seiner Ankunft dort (1536) gerade erst die Reformation eingeführt. Nach zweijähriger Tätigkeit wurden Farel und Calvin vom Stadtrat ausgewiesen. Als ihn der Stadtrat von Genf zurückrief, war Calvins Stellung wesentlich stärker als bei seinem ersten Genfer Aufenthalt. Er hatte Erfahrungen mit der Gemeindeorganisation gewonnen, die ihm jetzt zugutekamen. Im Herbst 1541 kam Calvin nach Genf und arbeitete umgehend eine Kirchenordnung aus. Calvins Rückhalt in den folgenden Jahren war das Pastorenkollegium (Compagnie des pasteurs). Der starke Zuzug verfolgter Hugenotten veränderte die Bevölkerungsstruktur Genfs und die Mehrheitsverhältnisse im Stadtrat, was 1555 zur Entmachtung der Calvin-kritischen Ratsfraktion führte."""
+            st.write('**Text**\n\n', context)
+
+
+        if option == 'Insert Own Text':
+            context = st.text_area("Enter text", "", key="1")
+            st.write('**Text**\n\n', context)
+        
+        if st.button('Show Summary'):
+            #response = sum_pipeline
+            st.write('Answer\n\n', response['answer'])
+
 
     if add_selectbox == "QA":
         qa()
