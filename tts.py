@@ -18,7 +18,7 @@ def app():
 
     idx = str(st.sidebar.number_input('Insert an index number between 0-1000 to select a random Story', min_value=0, max_value=10000, value=0))
     text = data[idx]['meta']['text']
-    st.write('Article:\n', text)
+    st.write('**Article:**\n\n', text)
 
     def text_2_speech(text):
         tts = gTTS(text[0:500], lang="de", slow=False)
