@@ -31,7 +31,7 @@ def app():
             question = "Wie Sonnenmassen entstehen?"
             st.write('Question\n\n', question)
 
-        if option == 'Insert Text':
+        if option == 'Insert Own Text':
         
             context = st.text_area("Enter context", "", key="1")
             st.write('Context\n\n', context)
