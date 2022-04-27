@@ -6,12 +6,15 @@ from multipage import MultiPage
 import ner
 import tts
 import appopenai
+from PIL import Image
 
 # Create an instance of the app 
 app = MultiPage()
 
 # Title of the main page
 st.title("Ippen Digital - NLP Applications")
+image = Image.open('nlp.jpeg')
+st.image(image)
 
 # Add all your applications (pages) here
 app.add_page("Named Entity Recognition", ner.app)

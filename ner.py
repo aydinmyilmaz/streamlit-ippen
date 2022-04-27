@@ -12,9 +12,10 @@ from PIL import Image
 import openai
 import os
 
+
 def app():
 
-    st.title('Analyse NER')
+    st.header('Named Entity Recognition')
 
     path = "data_1000.json"
 
@@ -25,11 +26,9 @@ def app():
     st.sidebar.header('Select Parameters')
 
     idx = str(st.sidebar.number_input('Insert an index number between 0-1000 to select a random Story', min_value=0, max_value=10000, value=0))
-    st.write('Given index number : ', idx)
-    st.write('Online Id:', data[idx]['meta']['online_id'])
+    st.write('**Online Id:**', data[idx]['meta']['online_id'])
     topx = st.sidebar.number_input('Insert most important x entity number to visualize', min_value=0, max_value=100, value=10)
-    st.write('Given top x entity index number : ', topx)
-
+    st.write('**Given top x entity index number :** ', topx)
 
 
     if st.sidebar.button('Show raw ner results dict   '):
@@ -91,13 +90,9 @@ def app():
         components.html(html_content_save, width=800, height=1000)
 
     def show_google_trends(token):
-
         pytrends = TrendReq(hl='de-GER', tz=360)
-
         pytrends.build_payload(kw_list=[token])
-
         time_df = pytrends.interest_over_time()
-
         # creating graph
         plt.style.use('bmh')
         register_matplotlib_converters()
@@ -107,7 +102,6 @@ def app():
         plt.title(f'Total Google Searches for {token}', fontweight='bold')
         plt.xlabel('Year')
         plt.ylabel('Total Count')
-
         return st.pyplot(fig)
 
     def google_trending_searches():
@@ -116,11 +110,10 @@ def app():
 
 
     if st.sidebar.button('Show highlighted text     '):
-        st.write('Online Id:', data[idx]['meta']['online_id'])
-        st.write('Highlighted text')
+        st.subheader('Highlighted text :')
         highlight_text(idx, topx) 
 
-    st.sidebar.header('Select Parameter and Function for G-Trends')
+    st.sidebar.header('Select Parameter and Function for Google Trends')
 
     entity_idx = st.sidebar.number_input('Select entity index number for Google Trends', min_value=0, max_value=20, value=0)
     token = data[idx]['ner_results'][entity_idx]['token']
