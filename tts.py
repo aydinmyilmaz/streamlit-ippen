@@ -48,6 +48,7 @@ def app():
     if st.sidebar.button(f'Run open source Text-2-Speech'):
         text = data[idx]['meta']['text']
         text_2_speech(text)
+        st.write("Increase speed to 1.25 for better performance")
 
     voice = st.sidebar.selectbox('Select voice', ['Vicki', 'Marlene','Hans'])
     if st.sidebar.button(f'Run AWS Polly Text-2-Speech'): 
