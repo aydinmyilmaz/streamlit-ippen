@@ -7,6 +7,7 @@ import openai
 import os
 import json
 
+
 def app():
 
     def recipeGenerator(name_of_dish, ingredients):
@@ -49,15 +50,27 @@ def app():
     ("Recipe Generator", "Summarization", "QA")
 )
     if add_selectbox == "Recipe Generator":
-        st.title("OpenAI Recipe Generator")
-        name_of_dish = st.text_input("Enter name of the dish", "", key="1")
-        st.write('Name of the dish is', name_of_dish)
-        ingredients = st.text_area("Enter ingredients","", key="2")
-        st.markdown('**ingredients**\n\n', ingredients)
+        
+        option = st.selectbox(
+                    'Select an option',
+                    ( '', 
+                     'Show Sample Recipe', 
+                     'Generate Own Recipe'))
+        if option == 'Show Sample Recipe':
+            ingredients = """ Coming soon""" 
+            name_of_dish = "Kichererbsen-Curry"   
+
+        if option == 'Generate Own Recipe':
+            st.title("OpenAI Recipe Generator")
+            name_of_dish = st.text_input("Enter name of the dish", "", key="1")
+            st.write('Name of the dish is', name_of_dish)
+            ingredients = st.text_area("Enter ingredients","", key="2")
+            st.markdown('**ingredients**\n\n', ingredients)
+        
         if st.button('Show Recipe'):
             recipe = recipeGenerator(name_of_dish, ingredients)
             st.markdown('**eat at your own risk!!!**\n\n', recipe['choices'][0]['text'])
-    
+        
     elif add_selectbox == "Summarization":
         st.title("OpenAI Summarization")
         
