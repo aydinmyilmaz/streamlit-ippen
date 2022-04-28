@@ -98,7 +98,7 @@ Zum Servieren:
             st.write('**eat at your own risk!!!**\n\n', recipe['choices'][0]['text'])
         
     elif add_selectbox == "Summarization":
-        st.header("Generate Summary")
+        st.header("Summary Generator")
         
         # path = "data_1000.json"
         # with open(path, 'r') as json_file:
