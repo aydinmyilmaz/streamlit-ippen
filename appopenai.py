@@ -65,11 +65,11 @@ def app():
             name_of_dish = st.text_input("Enter name of the dish", "", key="1")
             st.write('Name of the dish is', name_of_dish)
             ingredients = st.text_area("Enter ingredients","", key="2")
-            st.markdown('**ingredients**\n\n', ingredients)
+            st.write('**ingredients**\n\n', ingredients)
         
         if st.button('Show Recipe'):
             recipe = recipeGenerator(name_of_dish, ingredients)
-            st.markdown('**eat at your own risk!!!**\n\n', recipe['choices'][0]['text'])
+            st.write('**eat at your own risk!!!**\n\n', recipe['choices'][0]['text'])
         
     elif add_selectbox == "Summarization":
         st.title("OpenAI Summarization")
