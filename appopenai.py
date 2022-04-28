@@ -50,7 +50,7 @@ def app():
     ("Recipe Generator", "Summarization", "QA")
 )
     if add_selectbox == "Recipe Generator":
-        
+        st.header("Recipe Generator")
         option = st.selectbox(
                     'Select an option',
                     ( '', 
@@ -98,7 +98,7 @@ Zum Servieren:
             st.write('**eat at your own risk!!!**\n\n', recipe['choices'][0]['text'])
         
     elif add_selectbox == "Summarization":
-        st.title("OpenAI Summarization")
+        st.header("Generate Summary")
         
         # path = "data_1000.json"
         # with open(path, 'r') as json_file:

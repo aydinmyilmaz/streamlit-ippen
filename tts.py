@@ -9,6 +9,8 @@ from boto3 import client
 
 def app():
 
+    st.header("Text-2-Speech")
+
     path = "data_1000.json"
     with open(path, 'r') as json_file:
         data = json.load(json_file)
