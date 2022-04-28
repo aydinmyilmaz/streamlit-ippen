@@ -15,7 +15,7 @@ def app():
     ("QA","Summarization"))
 
     def qa():
-        st.title('Question Answering')
+        st.header('Question Answering')
         option = st.selectbox(
                     'Select an option',
                     ( '', 
