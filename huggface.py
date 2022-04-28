@@ -9,12 +9,13 @@ def app():
                 "question-answering",
                 model="deepset/gelectra-base-germanquad"
             ) 
-
+    
     add_selectbox = st.sidebar.selectbox(
     "Select NLP Function",
     ("QA","Summarization"))
 
     def qa():
+        st.header('Question Answering')
         option = st.selectbox(
                     'Select an option',
                     ( '', 
