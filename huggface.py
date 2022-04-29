@@ -5,12 +5,6 @@ from transformers import BertTokenizerFast, EncoderDecoderModel
 from transformers import AutoTokenizer, AutoModelWithLMHead
 from transformers import pipeline
 
-tokenizer = AutoTokenizer.from_pretrained("dbmdz/german-gpt2")
-model = AutoModelWithLMHead.from_pretrained("dbmdz/german-gpt2")
-gen_pipe = pipeline('text-generation', 
-                model="dbmdz/german-gpt2",
-                tokenizer="dbmdz/german-gpt2")
-
 def app():
 
     qa_pipeline = pipeline(
