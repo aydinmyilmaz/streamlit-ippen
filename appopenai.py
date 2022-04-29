@@ -84,7 +84,8 @@ Zum Servieren:
 5. Kichererbsen und Babyspinat hinzufügen und noch 5 Minuten köcheln lassen.
 6. Mit Zitronensaft abschmecken.
 7. Mit Joghurt und Koriander garnieren und servieren."""
-
+            st.write('Name of the dish is', name_of_dish)
+            st.write('**ingredients**\n\n', ingredients)
 
         if option == 'Generate Own Recipe':
             st.title("OpenAI Recipe Generator")
