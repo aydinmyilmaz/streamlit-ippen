@@ -12,9 +12,9 @@ def app():
                 model="deepset/gelectra-base-germanquad"
             ) 
 
-    gen_pipe = pipeline('text-generation', 
-                model="dbmdz/german-gpt2",
-                tokenizer="dbmdz/german-gpt2")     
+    # gen_pipe = pipeline('text-generation', 
+    #             model="dbmdz/german-gpt2",
+    #             tokenizer="dbmdz/german-gpt2")     
     
     add_selectbox = st.sidebar.selectbox(
     "Select NLP Function",
@@ -95,8 +95,8 @@ def app():
     if add_selectbox == "QA":
         qa()
     
-    if add_selectbox == "Completion":
-        completion()
+    # if add_selectbox == "Completion":
+    #     completion()
 
     else:
         st.write("coming soon...")
