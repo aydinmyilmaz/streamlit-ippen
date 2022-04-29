@@ -57,7 +57,7 @@ def app():
                      'Show Sample Recipe', 
                      'Generate Own Recipe'))
         if option == 'Show Sample Recipe':
-            ingredients = """Kichererbsen-Curry:
+            ingredients = """
 1 Zwiebel, gewürfelt
 2 Knoblauchzehen, fein gehackt
 2 TL gemahlener Koriander
