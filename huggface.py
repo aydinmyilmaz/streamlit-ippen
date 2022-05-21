@@ -64,10 +64,10 @@ def app():
             st.write('**Question:**\n\n', question)
         
         if st.button('Show Answer'):
-                response = qa_pipeline({
-                    "context": context,
-                    'question': question
-                })
+            response = qa_pipeline({
+                "context": context,
+                'question': question
+            })
             st.write('**Answer**\n\n', response['answer'])
 
     def summarization():
