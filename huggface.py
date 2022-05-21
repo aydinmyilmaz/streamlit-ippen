@@ -1,19 +1,34 @@
 from transformers import pipeline
 import streamlit as st
 
+
 def app():
 
-    qa_pipeline = pipeline(
-                "question-answering",
-                model="deepset/gelectra-base-germanquad"
-            ) 
+    @st.cache()
+    def load_qa_pipeline():
 
-    # gen_pipe = pipeline('text-generation', 
-    #             model="dbmdz/german-gpt2",
-    #             tokenizer="dbmdz/german-gpt2")     
+        qa_pipeline = pipeline(
+                    "question-answering",
+                    model="deepset/gelectra-base-germanquad"
+                ) 
+        return qa_pipeline
+        
+    @st.cache()
+    def load_summarization_pipeline():
+        summarizer = pipeline("summarization")
+        return summarizer
+
+    @st.cache()
+    def load_generator_pipeline():
+        gen_pipe = pipeline('text-generation', 
+                    model="dbmdz/german-gpt2",
+                    tokenizer="dbmdz/german-gpt2")     
+        return gen_pipe
     
-    summarizer =pipeline("summarization")
-    
+    qa_pipeline = load_qa_pipeline()
+    summarizer = load_summarization_pipeline()
+    #gen_pipe = load_generator_pipeline()
+
     add_selectbox = st.sidebar.selectbox(
     "Select NLP Function",
     ("QA",
