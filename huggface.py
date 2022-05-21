@@ -15,20 +15,20 @@ def load_qa_pipeline():
 
 qa_pipeline = load_qa_pipeline()
 
-@st.cache(allow_output_mutation=True)
-def load_summarization_model():
-    ckpt = 'mrm8488/bert2bert_shared-german-finetuned-summarization'
-    tokenizer = BertTokenizerFast.from_pretrained(ckpt)
-    model = EncoderDecoderModel.from_pretrained(ckpt)
+# @st.cache(allow_output_mutation=True)
+# def load_summarization_model():
+#     ckpt = 'mrm8488/bert2bert_shared-german-finetuned-summarization'
+#     tokenizer = BertTokenizerFast.from_pretrained(ckpt)
+#     model = EncoderDecoderModel.from_pretrained(ckpt)
 
-model, tokenizer, device = load_summarization_model()
+# model, tokenizer, device = load_summarization_model()
 
-def generate_summary(text):
-   inputs = tokenizer([text], padding="max_length", truncation=True, max_length=512, return_tensors="pt")
-   input_ids = inputs.input_ids.to(device)
-   attention_mask = inputs.attention_mask.to(device)
-   output = model.generate(input_ids, attention_mask=attention_mask)
-   return tokenizer.decode(output[0], skip_special_tokens=True)
+# def generate_summary(text):
+#    inputs = tokenizer([text], padding="max_length", truncation=True, max_length=512, return_tensors="pt")
+#    input_ids = inputs.input_ids.to(device)
+#    attention_mask = inputs.attention_mask.to(device)
+#    output = model.generate(input_ids, attention_mask=attention_mask)
+#    return tokenizer.decode(output[0], skip_special_tokens=True)
 
 # @st.cache(allow_output_mutation=True)
 # def load_generator_pipeline():
@@ -124,8 +124,8 @@ def app():
     # if add_selectbox == "Completion":
     #     completion()
     
-    if add_selectbox == "Summarization":
-        summarization()
+    # if add_selectbox == "Summarization":
+    #     summarization()
          
 
     else:
