@@ -13,11 +13,11 @@ def load_qa_pipeline():
 qa_pipeline = load_qa_pipeline()
 
 # @st.cache(allow_output_mutation=True)
-# def load_summarization_pipeline():
-#     summarizer = pipeline("summarization")
-#     return summarizer
+def load_summarization_pipeline():
+    summarizer = pipeline("summarization")
+    return summarizer
 
-# summarizer = load_summarization_pipeline()
+summarizer = load_summarization_pipeline()
 
 # @st.cache(allow_output_mutation=True)
 # def load_generator_pipeline():
@@ -112,8 +112,8 @@ def app():
     # if add_selectbox == "Completion":
     #     completion()
     
-    # if add_selectbox == "Summarization":
-    #     summarization()
+    if add_selectbox == "Summarization":
+         summarization()
 
     else:
         st.write("coming soon...")
