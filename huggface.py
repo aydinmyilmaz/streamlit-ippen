@@ -12,6 +12,8 @@ def app():
     #             model="dbmdz/german-gpt2",
     #             tokenizer="dbmdz/german-gpt2")     
     
+    summarizer =pipeline("summarization")
+    
     add_selectbox = st.sidebar.selectbox(
     "Select NLP Function",
     ("QA",
@@ -71,8 +73,8 @@ def app():
             st.write('**Text**\n\n', context)
         
         if st.button('Show Summary'):
-            #response = sum_pipeline
-            st.write('**Answer**\n\n', response['answer'])
+            summarized = summarizer(context, min_length=75, max_length=300)
+            st.write('**Answer**\n\n', summarized)
 
     def completion():
         option = st.selectbox(
@@ -82,7 +84,7 @@ def app():
 
         if option == 'Insert Text for Completion':
             sentence = st.text_area("Enter sentence", "", key="1")
-            text = gen_pipe(sentence, max_length=100)[0]["generated_text"]
+            #text = gen_pipe(sentence, max_length=100)[0]["generated_text"]
             
         
         if st.button('Generate Text'):
@@ -93,6 +95,8 @@ def app():
     
     # if add_selectbox == "Completion":
     #     completion()
+    if add_selectbox == "Summarization":
+        summarization()
 
     else:
         st.write("coming soon...")

@@ -56,34 +56,35 @@ def app():
                     ( '', 
                      'Show Sample Recipe', 
                      'Generate Own Recipe'))
+        
         if option == 'Show Sample Recipe':
             ingredients = """
-1 Zwiebel, gewürfelt
-2 Knoblauchzehen, fein gehackt
-2 TL gemahlener Koriander
-1 TL Kreuzkümmel (Cumin)
-1 TL Curcuma
-1 Prise Chiliflocken
-1 Prise Salz
-3 cm Ingwer, fein gehackt
-4 Tomaten, gewürfelt
-4 EL rote Linsen
-4 EL Kokosnusscreme
-250 g Brokkoli, in Röschen
-1 Dose Kichererbsen, abgetropft
-100 g frischer Babyspinat
-Saft von 1/2 Zitrone
-Zum Servieren:
-3 EL Naturjoghurt
-2 EL frischer Koriander, gehackt""" 
+                    1 Zwiebel, gewürfelt
+                    2 Knoblauchzehen, fein gehackt
+                    2 TL gemahlener Koriander
+                    1 TL Kreuzkümmel (Cumin)
+                    1 TL Curcuma
+                    1 Prise Chiliflocken
+                    1 Prise Salz
+                    3 cm Ingwer, fein gehackt
+                    4 Tomaten, gewürfelt
+                    4 EL rote Linsen
+                    4 EL Kokosnusscreme
+                    250 g Brokkoli, in Röschen
+                    1 Dose Kichererbsen, abgetropft
+                    100 g frischer Babyspinat
+                    Saft von 1/2 Zitrone
+                    Zum Servieren:
+                    3 EL Naturjoghurt
+                    2 EL frischer Koriander, gehackt""" 
             name_of_dish = "Kichererbsen-Curry"
             recipe = """ 1. Zwiebel und Knoblauch in einer Pfanne anbraten.
-2. Koriander, Kreuzkümmel, Curcuma, Chiliflocken und Salz hinzufügen und kurz mitbraten.
-3. Ingwer, Tomaten, Linsen, Kokosnusscreme und Brokkoli hinzufügen.
-4. Alles ca. 15 Minuten köcheln lassen.
-5. Kichererbsen und Babyspinat hinzufügen und noch 5 Minuten köcheln lassen.
-6. Mit Zitronensaft abschmecken.
-7. Mit Joghurt und Koriander garnieren und servieren."""
+                        2. Koriander, Kreuzkümmel, Curcuma, Chiliflocken und Salz hinzufügen und kurz mitbraten.
+                        3. Ingwer, Tomaten, Linsen, Kokosnusscreme und Brokkoli hinzufügen.
+                        4. Alles ca. 15 Minuten köcheln lassen.
+                        5. Kichererbsen und Babyspinat hinzufügen und noch 5 Minuten köcheln lassen.
+                        6. Mit Zitronensaft abschmecken.
+                        7. Mit Joghurt und Koriander garnieren und servieren."""
             st.write('Name of the dish is', name_of_dish)
             st.write('**ingredients**\n\n', ingredients)
 
