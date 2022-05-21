@@ -10,10 +10,14 @@ def load_qa_pipeline():
             ) 
     return qa_pipeline
 
-@st.cache(allow_output_mutation=True)
-def load_summarization_pipeline():
-    summarizer = pipeline("summarization")
-    return summarizer
+qa_pipeline = load_qa_pipeline()
+
+# @st.cache(allow_output_mutation=True)
+# def load_summarization_pipeline():
+#     summarizer = pipeline("summarization")
+#     return summarizer
+
+# summarizer = load_summarization_pipeline()
 
 # @st.cache(allow_output_mutation=True)
 # def load_generator_pipeline():
@@ -22,8 +26,6 @@ def load_summarization_pipeline():
 #                 tokenizer="dbmdz/german-gpt2")     
 #     return gen_pipe
 
-qa_pipeline = load_qa_pipeline()
-summarizer = load_summarization_pipeline()
 #gen_pipe = load_generator_pipeline()
 
 def app():
