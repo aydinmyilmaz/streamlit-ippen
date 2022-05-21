@@ -111,8 +111,9 @@ def app():
     
     # if add_selectbox == "Completion":
     #     completion()
-    if add_selectbox == "Summarization":
-        summarization()
+    
+    # if add_selectbox == "Summarization":
+    #     summarization()
 
     else:
         st.write("coming soon...")
