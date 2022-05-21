@@ -1,33 +1,32 @@
 from transformers import pipeline
 import streamlit as st
 
+@st.cache(allow_output_mutation=True)
+def load_qa_pipeline():
+
+    qa_pipeline = pipeline(
+                "question-answering",
+                model="deepset/gelectra-base-germanquad"
+            ) 
+    return qa_pipeline
+
+@st.cache(allow_output_mutation=True)
+def load_summarization_pipeline():
+    summarizer = pipeline("summarization")
+    return summarizer
+
+# @st.cache(allow_output_mutation=True)
+# def load_generator_pipeline():
+#     gen_pipe = pipeline('text-generation', 
+#                 model="dbmdz/german-gpt2",
+#                 tokenizer="dbmdz/german-gpt2")     
+#     return gen_pipe
+
+qa_pipeline = load_qa_pipeline()
+summarizer = load_summarization_pipeline()
+#gen_pipe = load_generator_pipeline()
 
 def app():
-
-    @st.cache()
-    def load_qa_pipeline():
-
-        qa_pipeline = pipeline(
-                    "question-answering",
-                    model="deepset/gelectra-base-germanquad"
-                ) 
-        return qa_pipeline
-        
-    @st.cache()
-    def load_summarization_pipeline():
-        summarizer = pipeline("summarization")
-        return summarizer
-
-    @st.cache()
-    def load_generator_pipeline():
-        gen_pipe = pipeline('text-generation', 
-                    model="dbmdz/german-gpt2",
-                    tokenizer="dbmdz/german-gpt2")     
-        return gen_pipe
-    
-    qa_pipeline = load_qa_pipeline()
-    summarizer = load_summarization_pipeline()
-    #gen_pipe = load_generator_pipeline()
 
     add_selectbox = st.sidebar.selectbox(
     "Select NLP Function",
@@ -91,19 +90,19 @@ def app():
             summarized = summarizer(context, min_length=75, max_length=300)
             st.write('**Answer**\n\n', summarized)
 
-    def completion():
-        option = st.selectbox(
-                    'Select an option',
-                    ('', 
-                    'Insert Text for Completion'))
+    # def completion():
+    #     option = st.selectbox(
+    #                 'Select an option',
+    #                 ('', 
+    #                 'Insert Text for Completion'))
 
-        if option == 'Insert Text for Completion':
-            sentence = st.text_area("Enter sentence", "", key="1")
-            #text = gen_pipe(sentence, max_length=100)[0]["generated_text"]
+    #     if option == 'Insert Text for Completion':
+    #         sentence = st.text_area("Enter sentence", "", key="1")
+    #         #text = gen_pipe(sentence, max_length=100)[0]["generated_text"]
             
         
-        if st.button('Generate Text'):
-            st.write('**Generated Text**\n\n', text)
+    #     if st.button('Generate Text'):
+    #         st.write('**Generated Text**\n\n', text)
 
     if add_selectbox == "QA":
         qa()
