@@ -29,10 +29,10 @@ summarizer = load_summarization_pipeline()
 def app():
 
     add_selectbox = st.sidebar.selectbox(
-    "Select NLP Function",
-    ("QA",
-    "Summarization", 
-    "Completion"))
+                        "Select NLP Function",
+                        ("QA",
+                        "Summarization", 
+                        "Completion"))
 
     def qa():
         st.header('Question Answering')
@@ -64,10 +64,10 @@ def app():
             st.write('**Question:**\n\n', question)
         
         if st.button('Show Answer'):
-            response = qa_pipeline({
-                "context": context,
-                'question': question
-            })
+                response = qa_pipeline({
+                    "context": context,
+                    'question': question
+                })
             st.write('**Answer**\n\n', response['answer'])
 
     def summarization():
